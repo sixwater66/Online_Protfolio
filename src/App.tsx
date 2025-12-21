@@ -6,7 +6,7 @@ import { SketchRoom } from './components/SketchRoom.tsx';
 import { SketchyButton } from './components/SketchyButton.tsx';
 import type { Project } from './types';
 
-const RESUME_PDF_URL = '/resume.pdf';
+const RESUME_PDF_URL = `${import.meta.env.BASE_URL}resume.pdf`;
 // ✅ 建议：把你的简历 PDF 放到 public/resume.pdf
 
 const CV_IMAGE_URL =
