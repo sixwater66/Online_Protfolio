@@ -23,7 +23,7 @@ export const SketchRoom: React.FC<Props> = ({
         aspect-[3/4] md:aspect-[4/3]
         md:min-h-screen
         md:max-w-[1800px]
-        bg-neutral overflow-visible select-none
+        bg-neutral overflow-hidden select-none
         border-4 border-ink rough-border shadow-2xl
       "
     >
