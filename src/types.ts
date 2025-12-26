@@ -1,11 +1,23 @@
 // src/types.ts
 
-// 项目数据结构
+export interface ProjectSection {
+  title: string;
+  body: string[]; // 每段一行
+}
+
 export interface Project {
   id: number;
   title: string;
   image: string;
   description: string;
+
+  // ✅ 详情页用（可选）
+  year?: string;
+  role?: string;
+  tools?: string[];
+  videoUrl?: string;        // YouTube 链接（可选）
+  gallery?: string[];       // 多图（可选）
+  sections?: ProjectSection[];
 }
 
 /**
@@ -14,10 +26,10 @@ export interface Project {
 export const ViewState = {
   HOME: 'HOME',
   PROJECTS: 'PROJECTS',
+  PROJECT_DETAIL: 'PROJECT_DETAIL', // ✅ NEW
   RESEARCH: 'RESEARCH',
   CONTACT: 'CONTACT',
   CV: 'CV',
 } as const;
 
-// ViewState 类型 = 上面这个对象的值联合类型
 export type ViewState = (typeof ViewState)[keyof typeof ViewState];
