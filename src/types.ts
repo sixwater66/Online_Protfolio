@@ -1,8 +1,6 @@
-// src/types.ts
-
 export interface ProjectSection {
   title: string;
-  body: string[]; // 每段一行
+  body: string[];
 }
 
 export interface Project {
@@ -10,26 +8,34 @@ export interface Project {
   title: string;
   image: string;
   description: string;
+  category: string;
 
-  // ✅ 详情页用（可选）
   year?: string;
   role?: string;
   tools?: string[];
-  videoUrl?: string;        // YouTube 链接（可选）
-  gallery?: string[];       // 多图（可选）
+  videoUrl?: string;
+  gallery?: string[];
   sections?: ProjectSection[];
 }
 
+export interface ResearchLink {
+  title: string;
+  url?: string;       // 可选：外链（如果你以后要跳外部）
+  body?: string[];    // 可选：文章内容（用于 Research Detail）
+}
+
 /**
- * 用常量对象 + 类型代替 enum，兼容 TS 新配置
+ * ✅ 使用 const + union type，兼容你当前 TS 配置（避免 enum）
  */
 export const ViewState = {
   HOME: 'HOME',
+  MAP_VIEW: 'MAP_VIEW',
   PROJECTS: 'PROJECTS',
-  PROJECT_DETAIL: 'PROJECT_DETAIL', // ✅ NEW
+  PROJECT_DETAIL: 'PROJECT_DETAIL',
+  ABOUT: 'ABOUT',
   RESEARCH: 'RESEARCH',
+  RESEARCH_DETAIL: 'RESEARCH_DETAIL',
   CONTACT: 'CONTACT',
-  CV: 'CV',
 } as const;
 
 export type ViewState = (typeof ViewState)[keyof typeof ViewState];
