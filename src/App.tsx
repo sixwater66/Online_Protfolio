@@ -29,11 +29,10 @@ const App: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   /**
-   * ✅ 你的 public/ 下新文件名：
+   * ✅ public/ 下文件名：
    * - CV.pdf
-   * - Protfolio.pdf   （你拼写是 Protfolio，不是 Portfolio，我按你文件名来）
-   *
-   * ✅ 使用 BASE_URL 兼容 GitHub Pages 的 base
+   * - Portfolio.pdf
+   * ✅ BASE_URL 兼容 GitHub Pages base
    */
   const CV_PDF_URL = useMemo(() => {
     const base = import.meta.env.BASE_URL ?? '/';
@@ -44,7 +43,7 @@ const App: React.FC = () => {
   const PORTFOLIO_PDF_URL = useMemo(() => {
     const base = import.meta.env.BASE_URL ?? '/';
     const normalized = base.endsWith('/') ? base : `${base}/`;
-    return `${normalized}Protfolio.pdf`;
+    return `${normalized}Portfolio.pdf`;
   }, []);
 
   // Home 轮播
@@ -77,21 +76,6 @@ const App: React.FC = () => {
     setSelectedCategory(category);
     setViewState(ViewState.PROJECTS);
     setActiveProjectId(null);
-    window.scrollTo(0, 0);
-  };
-
-  const goAbout = () => {
-    setViewState(ViewState.ABOUT);
-    window.scrollTo(0, 0);
-  };
-
-  const goResearch = () => {
-    setViewState(ViewState.RESEARCH);
-    window.scrollTo(0, 0);
-  };
-
-  const goContact = () => {
-    setViewState(ViewState.CONTACT);
     window.scrollTo(0, 0);
   };
 
@@ -183,7 +167,9 @@ const App: React.FC = () => {
   // ====== 页面渲染 ======
   const renderHome = () => (
     <div className="relative min-h-screen w-full bg-neutral flex flex-col items-center">
-      <header className={`relative w-full flex flex-col md:flex-row justify-between items-center gap-4 mt-10 mb-6 z-10 px-4 ${MAX_FRAME}`}>
+      <header
+        className={`relative w-full flex flex-col md:flex-row justify-between items-center gap-4 mt-10 mb-6 z-10 px-4 ${MAX_FRAME}`}
+      >
         <div className="text-center md:text-left">
           <h1 className="font-hand text-5xl sm:text-6xl font-bold text-ink drop-shadow-md -rotate-2 animate-wobble-slow">
             My <span className="text-primary underline decoration-ink/20">Sketchy</span> Studio
@@ -203,7 +189,7 @@ const App: React.FC = () => {
     </div>
   );
 
-  const renderMap = () => (  
+  const renderMap = () => (
     <PageWrapper
       title="Creation Map"
       hideHeader
@@ -212,7 +198,12 @@ const App: React.FC = () => {
       allowOverflow
     >
       <div className="relative w-full overflow-visible">
-        <img src={MAP_BG_URL} alt="Creation Map Background" className="w-full h-auto block md:w-[70%] md:mx-auto md:-translate-y-[200px]" draggable={false} />
+        <img
+          src={MAP_BG_URL}
+          alt="Creation Map Background"
+          className="w-full h-auto block md:w-[70%] md:mx-auto md:-translate-y-[200px]"
+          draggable={false}
+        />
 
         {/* Marker 1 */}
         <div
@@ -380,113 +371,107 @@ const App: React.FC = () => {
     );
   };
 
-   // ✅ About：CV / Portfolio 都从 public 打开 PDF
-  const renderAbout = () => {
-    const CV_URL = `${import.meta.env.BASE_URL}CV.pdf`;
-    const PORTFOLIO_URL = `${import.meta.env.BASE_URL}Portfolio.pdf`;
+  // ✅ About：CV / Portfolio 都从 public 打开 PDF（用上方 useMemo 的 URL，避免 unused 报错）
+  const renderAbout = () => (
+    <PageWrapper
+      title="About Me"
+      hideHeader
+      allowOverflow
+      color="bg-transparent"
+      backHome={{ text: '← Back Home', action: goHome }}
+    >
+      <div className="relative w-full overflow-visible">
+        <img src={ABOUT_BG_URL} alt="Background" className="w-full h-auto block" draggable={false} />
 
-    return (
-      <PageWrapper
-        title="About Me"
-        hideHeader
-        allowOverflow
-        color="bg-transparent"
-        backHome={{ text: '← Back Home', action: goHome }}
-      >
-        <div className="relative w-full overflow-visible">
-          <img src={ABOUT_BG_URL} alt="Background" className="w-full h-auto block" draggable={false} />
+        <div
+          className="
+            absolute
+            top-[8%] bottom-[10%] left-[10%] right-[8%]
+            md:top-[6%] md:bottom-[8%] md:left-[8%] md:right-[8%]
+            z-10
+            overflow-y-auto
+            font-hand text-ink pr-4
+          "
+        >
+          <div className="absolute top-0 right-[2%] z-50 pointer-events-none">
+            {/* CV：打开 CV.pdf */}
+            <a
+              href={CV_PDF_URL}
+              target="_blank"
+              rel="noreferrer"
+              className="
+                pointer-events-auto
+                absolute
+                top-2 md:top-4
+                right-2 md:right-[-30px]
+                w-36 md:w-[450px]
+                group
+              "
+              title="Open CV.pdf"
+            >
+              <img
+                src={CV_BTN_IMAGE}
+                alt="Open CV"
+                className="w-full h-auto drop-shadow-lg transition-transform group-hover:scale-105"
+                draggable={false}
+              />
+            </a>
 
-          <div
-            className="
-              absolute
-              top-[8%] bottom-[10%] left-[10%] right-[8%]
-              md:top-[6%] md:bottom-[8%] md:left-[8%] md:right-[8%]
-              z-10
-              overflow-y-auto
-              font-hand text-ink pr-4
-            "
-          >
-            {/* ✅ 两按钮各自 absolute 定位；Portfolio 现在是 <a href=...Portfolio.pdf> */}
-            <div className="absolute top-0 right-[2%] z-50 pointer-events-none">
-              {/* CV：打开 CV.pdf */}
-              <a
-                href={CV_URL}
-                target="_blank"
-                rel="noreferrer"
-                className="
-                  pointer-events-auto
-                  absolute
-                  top-2 md:top-4
-                  right-2 md:right-[-30px]
-                  w-36 md:w-[450px]
-                  group
-                "
-                title="Open CV.pdf"
-              >
-                <img
-                  src={CV_BTN_IMAGE}
-                  alt="Open CV"
-                  className="w-full h-auto drop-shadow-lg transition-transform group-hover:scale-105"
-                  draggable={false}
-                />
-              </a>
+            {/* Portfolio：打开 Portfolio.pdf */}
+            <a
+              href={PORTFOLIO_PDF_URL}
+              target="_blank"
+              rel="noreferrer"
+              className="
+                pointer-events-auto
+                absolute
+                top-16 md:top-[200px]
+                right-[-18px] md:right-[-30px]
+                w-36 md:w-[450px]
+                group
+              "
+              title="Open Portfolio.pdf"
+            >
+              <img
+                src={PORTFOLIO_BTN_IMAGE}
+                alt="Open Portfolio"
+                className="w-full h-auto drop-shadow-lg transition-transform group-hover:scale-105"
+                draggable={false}
+              />
+            </a>
+          </div>
 
-              {/* ✅ Portfolio：打开 public/Portfolio.pdf（不会再回主页） */}
-              <a
-                href={PORTFOLIO_URL}
-                target="_blank"
-                rel="noreferrer"
-                className="
-                  pointer-events-auto
-                  absolute
-                  top-16 md:top-[200px]
-                  right-[-18px] md:right-[-30px]
-                  w-36 md:w-[450px]
-                  group
-                "
-                title="Open Portfolio.pdf"
-              >
-                <img
-                  src={PORTFOLIO_BTN_IMAGE}
-                  alt="Open Portfolio"
-                 className="w-full h-auto drop-shadow-lg transition-transform group-hover:scale-105"
-                  draggable={false}
-                />
-              </a>
+          <div className="flex flex-col gap-8 md:gap-12 pt-20 md:pt-24 pb-6">
+            <div className="flex flex-col md:flex-row gap-6 md:gap-10 items-center md:items-start">
+              <div className="w-64 md:w-[500px] flex-shrink-0 animate-wobble-slow md:mt-[100px] md:ml-[500px]">
+                <img src={BIO_IMAGE_URL} alt="Bio" className="w-full h-auto object-contain" draggable={false} />
+              </div>
+
+              <div className="md:flex-1 ml-[10%] w-[420px] md:ml-[-55%] md:mt-[50%]">
+                <h2 className="text-4xl md:text-9xl font-bold mb-4 text-primary underline decoration-ink/20">Bio</h2>
+                <div className="space-y-4 text-xl md:text-7xl leading-relaxed text-ink">
+                  <p>
+                    I’m a cross-media narrative designer and creative technologist, supporting game teams and creative projects
+                    from concept to a presentable prototype.
+                  </p>
+                  <p>My core skills include Unity/Unreal development, sensing interaction (Arduino), and AI-assisted workflows.</p>
+                </div>
+              </div>
             </div>
 
-            {/* ✅ 给正文预留顶部空间，避免被按钮遮住 */}
-            <div className="flex flex-col gap-8 md:gap-12 pt-20 md:pt-24 pb-6">
-              <div className="flex flex-col md:flex-row gap-6 md:gap-10 items-center md:items-start">
-                <div className="w-64 md:w-[500px] flex-shrink-0 animate-wobble-slow md:mt-[100px] md:ml-[500px]">
-                  <img src={BIO_IMAGE_URL} alt="Bio" className="w-full h-auto object-contain" draggable={false} />
-                </div>
-
-                <div className="w-full md:flex-1 ml-[10%] w-[420px] md:ml-[-55%] md:mt-[50%]">
-                  <h2 className="text-4xl md:text-9xl font-bold mb-4 text-primary underline decoration-ink/20">Bio</h2>
-                  <div className="space-y-4 text-xl md:text-7xl leading-relaxed text-ink">
-                    <p>
-                      I’m a cross-media narrative designer and creative technologist, supporting game teams and creative projects
-                      from concept to a presentable prototype.
-                    </p>
-                    <p>My core skills include Unity/Unreal development, sensing interaction (Arduino), and AI-assisted workflows.</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="relative ml-[10%] w-[420px] md:ml-[15%] md:w-[1020px] md:mt-[0%]">
-                <h2 className="text-4xl md:text-9xl font-bold mb-4 text-primary underline decoration-ink/20">Artist Statement</h2>
-                <p className="text-xl md:text-7xl leading-relaxed italic mb-8 border-l-4 border-primary pl-4 text-ink/90">
-                  My practice treats interactive media as both a research object and a method—building playful systems to test how
-                  perception, narrative, and technology reshape each other.
-                </p>
-              </div>
+            <div className="relative ml-[10%] w-[420px] md:ml-[15%] md:w-[1020px] md:mt-[0%]">
+              <h2 className="text-4xl md:text-9xl font-bold mb-4 text-primary underline decoration-ink/20">Artist Statement</h2>
+              <p className="text-xl md:text-7xl leading-relaxed italic mb-8 border-l-4 border-primary pl-4 text-ink/90">
+                My practice treats interactive media as both a research object and a method—building playful systems to test how
+                perception, narrative, and technology reshape each other.
+              </p>
             </div>
           </div>
         </div>
-      </PageWrapper>
-    );
-  };
+      </div>
+    </PageWrapper>
+  );
+
   const renderResearch = () => (
     <PageWrapper
       title="Research & Thoughts"
@@ -497,13 +482,13 @@ const App: React.FC = () => {
       <div className="relative w-full overflow-hidden top-[150px] md:top-[0px]">
         <img src={RESEARCH_BG_URL} alt="Research Background" className="w-full h-auto block" draggable={false} />
 
-        <div className="absolute top-[12%] bottom-[12%] left-[10%] right-[10%] z-10 overflow-y-auto font-hand text-ink pr-2 ">
-          <div className="flex flex-col gap-6 py-6 ">
-            <h2 className="text-4xl md:text-9xl font-bold mb-4 text-primary underline decoration-ink/20 text-center relative left-[-50px] md:left-[-200px] ">
+        <div className="absolute top-[12%] bottom-[12%] left-[10%] right-[10%] z-10 overflow-y-auto font-hand text-ink pr-2">
+          <div className="flex flex-col gap-6 py-6">
+            <h2 className="text-4xl md:text-9xl font-bold mb-4 text-primary underline decoration-ink/20 text-center relative left-[-50px] md:left-[-200px]">
               Journal & Notes
             </h2>
 
-            <div className="space-y-4 w-full max-w-[280px] mx-[9%] md:max-w-[690px] md:mx-auto md:mx-[10%]">
+            <div className="space-y-4 w-full max-w-[280px] mx-[9%] md:max-w-[690px] md:mx-[10%]">
               {RESEARCH_LINKS.map((link, idx) => (
                 <a
                   key={idx}
@@ -512,7 +497,7 @@ const App: React.FC = () => {
                   rel="noreferrer"
                   className="
                     group block p-4 md:p-6 border-4 border-ink bg-white/60 hover:bg-primary/20
-                    transition-all font-hand text-xl md:text-7xl  font-bold relative cursor-pointer
+                    transition-all font-hand text-xl md:text-7xl font-bold relative cursor-pointer
                     shadow-md rough-border -rotate-1 hover:rotate-0
                   "
                   title="Open Link"
@@ -520,7 +505,7 @@ const App: React.FC = () => {
                   <span className="relative z-10">
                     {idx + 1}. {link.title}
                   </span>
-                  <span className="float-right group-hover:translate-x-2 transition-transform text-ink/50 text-base text-xl md:text-7xl ">
+                  <span className="float-right group-hover:translate-x-2 transition-transform text-ink/50 text-xl md:text-7xl">
                     Open Link →
                   </span>
                 </a>
